@@ -10,7 +10,7 @@ Wersja robocza. Ceny orientacyjne (PLN, AliExpress/krajowe sklepy). Pozycje „(
 |---|---|---|---|---|---|
 | 1 | ESP32-S3 DevKitC-1 (lub inny ESP32) | 1 | mikrokontroler, TWAI, WiFi | **jest**. Do prototypu OK; w wersji docelowej płytka bez USB-UART/LED (niższy pobór w uśpieniu) | – |
 | 2 | Moduł MCP2515 | 1 | HS-CAN 500 kbit/s przez SPI | **jest**. Sprawdzić kwarc (8/16 MHz) i transceiver. Jeśli TJA1050 (5 V) → patrz poz. 4 | – |
-| 3 | Moduł transceivera **SN65HVD230** (3,3 V) | 2 | MS-CAN do TWAI w ESP32 (+ zapas) | tani, 3,3 V. Pin Rs: na tanich modułach bywa na sztywno do GND – do standby trzeba go wyprowadzić (do weryfikacji) | 10–15 |
+| 3 | Moduł transceivera **SN65HVD230** (3,3 V), np. Waveshare | 1 | MS-CAN do TWAI w ESP32 (MCP2515 ma własny transceiver) | tani, 3,3 V. Pin Rs: na tanich modułach bywa na sztywno do GND – do standby trzeba go wyprowadzić (do weryfikacji) | 10–15 |
 | 4 | Konwerter poziomów 4-kanałowy (BSS138) | 1 | SPI ESP32 (3,3 V) ↔ MCP2515 na 5 V | tylko jeśli moduł MCP2515 ma TJA1050 i jest zasilany z 5 V | 5 |
 
 Alternatywa dla 3+4 w wersji docelowej: transceivery z prawdziwym standby i wybudzaniem – **TJA1042T/3** lub **TCAN1042V** (~10–15 µA w standby).

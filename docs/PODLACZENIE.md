@@ -3,6 +3,8 @@
 Wariant wg D-006: holter zasilany z powerbanka, ładowanego z gniazda zapalniczki tylko w czasie jazdy.
 Z gniazda OBD-II bierzemy wyłącznie sygnały CAN, masę i pomiar napięcia.
 
+![Podłączenie holtera do auta](img/podlaczenie.svg)
+
 ## Schemat blokowy
 
 ```mermaid

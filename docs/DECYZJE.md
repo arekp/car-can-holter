@@ -51,8 +51,8 @@ Format wpisu:
 - **Odrzucone opcje:** INA226 z bocznikiem na klemie minusowej, bocznik z przekaźnikiem obejściowym.
 - **Otwarte kwestie:** czy w MVP dodać ADS1115 od razu (tani, przyda się w etapie 2).
 
-## D-006: Zasilanie z własnego akumulatora ładowanego podczas jazdy (PROPOZYCJA – do potwierdzenia)
-- **Decyzja (proponowana):** holter zasilany z własnego ogniwa Li-ion/LiFePO4, ładowanego tylko przy pracującym
+## D-006: Zasilanie z własnego akumulatora ładowanego podczas jazdy (PRZYJĘTA)
+- **Decyzja:** holter zasilany z własnego ogniwa Li-ion/LiFePO4, ładowanego tylko przy pracującym
   silniku (napięcie > 13,2 V lub zasilanie po stacyjce). Na postoju holter nie pobiera prądu z akumulatora auta.
 - **Dlaczego:** pobór holtera nie fałszuje pomiaru upływu i nie dokłada się do rozładowania; ESP32 nie musi
   agresywnie oszczędzać energii (prostszy firmware, częstsze WiFi); sygnał „ładuję” = „silnik pracuje”.
@@ -65,4 +65,5 @@ Format wpisu:
   dochodzi moduł zasilania z power-path, BMS, układ włączający ładowanie przy > 13,2 V; wspólna masa z autem
   (OBD pin 5) nadal wymagana dla CAN.
 - **Odrzucone opcje:** —
-- **Otwarte kwestie:** komercyjny powerbank (prototyp) vs. ogniwo + moduł UPS (docelowo); chemia ogniwa; pojemność.
+- **Otwarte kwestie:** prototyp – powerbank always-on ładowany z zapalniczki; docelowo LiFePO4 + BMS + UPS.
+  Do sprawdzenia: czy zapalniczka gaśnie po wyjęciu kluczyka. Schemat: `docs/PODLACZENIE.md`.

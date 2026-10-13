@@ -15,16 +15,18 @@ Wersja robocza. Ceny orientacyjne (PLN, AliExpress/krajowe sklepy). Pozycje „(
 
 Alternatywa dla 3+4 w wersji docelowej: transceivery z prawdziwym standby i wybudzaniem – **TJA1042T/3** lub **TCAN1042V** (~10–15 µA w standby).
 
-### Zasilanie z auta
+### Połączenie z autem i zasilanie (wg D-006: własny akumulator ładowany w czasie jazdy)
 
 | # | Komponent | Ilość | Po co | Uwagi | ~Cena |
 |---|---|---|---|---|---|
-| 5 | Wtyk OBD-II męski z przewodami (pigtail) **albo rozgałęźnik OBD (Y)** | 1 | dostęp do pinów 3/11 (MS-CAN), 6/14 (HS-CAN), 16 (+12 V), 4/5 (masa) | rozgałęźnik zostawia wolne gniazdo dla FORScan/ELM327 | 15–30 |
-| 6 | Przetwornica step-down 12 V → 5 V, niski prąd spoczynkowy, wejście ≥ 36 V | 1 | zasilanie z pinu 16 | np. Pololu D36V6F5 / D36V6F3 (3,3 V) (do weryfikacji Iq). Unikać tanich LM2596 – duży pobór własny | 25–50 |
-| 7 | Bezpiecznik w przewodzie 1 A + oprawka | 1 | ochrona instalacji auta | zaraz przy wtyku OBD | 5 |
-| 8 | Dioda Schottky SS34 (lub ideal-diode) | 1 | odwrotna polaryzacja | | 1 |
-| 9 | Dioda TVS **SMBJ24A** (lub SMAJ26A) | 1 | skoki napięcia (load dump, rozruch) | równolegle do wejścia za bezpiecznikiem | 2 |
-| 10 | Kondensatory: elektrolit 100–470 µF/35 V, ceramiczne 100 nF | kilka | filtracja, podtrzymanie przy rozruchu | | 5 |
+| 5 | **Rozgałęźnik OBD (Y)** albo wtyk OBD-II męski z przewodami | 1 | dostęp do pinów 3/11 (MS-CAN), 6/14 (HS-CAN), 5 (masa), 16 (pomiar napięcia) | rozgałęźnik zostawia wolne gniazdo dla FORScan/ELM327 | 15–30 |
+| 6 | **Powerbank z trybem „always on” / „low current” i pass-through** (10 000 mAh) | 1 | zasilanie holtera na postoju (prototyp) | sprawdzić: nie wyłącza się przy ~20–50 mA i nie przerywa wyjścia przy podłączeniu/odłączeniu ładowania | 80–150 |
+| 7 | Ładowarka USB do gniazda zapalniczki (12 V → 5 V) | 1 | ładowanie powerbanka tylko w czasie jazdy | gniazdo musi gasnąć po wyjęciu kluczyka (sprawdzić w aucie) | 15–30 |
+| 8 | Bezpiecznik 0,5 A + oprawka (linia pomiarowa z pinu 16) | 1 | ochrona instalacji auta | zaraz przy wtyku OBD | 5 |
+| 9 | Skrętka (np. para z kabla sieciowego) | ~1 m | przewody CAN-H/CAN-L | krótko (< 30–50 cm), każda magistrala na swojej parze | – |
+
+Wersja docelowa zamiast 6–7: ogniwo **LiFePO4** + BMS z czujnikiem temperatury + moduł UPS z power-path
++ ładowanie włączane przy napięciu auta > 13,2 V.
 
 ### Zapis danych i czas
 
@@ -39,7 +41,7 @@ Alternatywa dla 3+4 w wersji docelowej: transceivery z prawdziwym standby i wybu
 | # | Komponent | Ilość | Po co | Uwagi | ~Cena |
 |---|---|---|---|---|---|
 | 14 | **ADS1115** (16-bit ADC, I²C) | 1 | napięcie akumulatora (dokładnie), później spadki na bezpiecznikach | 4 wejścia, wzmocnienie do ±256 mV | 10–15 |
-| 15 | Rezystory 1%: 100 kΩ i 22 kΩ (dzielnik) + 100 nF | 1 kpl | 12–15 V → zakres ADS1115/ESP32 | dzielnik ~5,5:1; prąd dzielnika ~0,1 mA – liczyć do budżetu poboru | 1 |
+| 15 | Rezystory 1%: 1 MΩ i 220 kΩ (dzielnik) + 100 nF + dioda podwójna BAT54S | 1 kpl | 12–15 V → ~2,7 V na wejście ADS1115 | pobór z auta ~12 µA; BAT54S ogranicza skoki do zakresu 0–3,3 V | 2 |
 
 ### Montaż prototypu
 

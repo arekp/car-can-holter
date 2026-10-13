@@ -39,3 +39,14 @@ Format wpisu:
 - **Decyzja:** ESP32 + posiadany moduł MCP2515. Dane: zapis na nośnik lub przesył dalej – do rozstrzygnięcia.
 - **Dlaczego:** sprzęt już jest.
 - **Otwarte kwestie:** dokładny model modułu (kwarc, transceiver), wariant ESP32, nośnik vs WiFi.
+
+## D-005: Pomiar prądu – bez bocznika w obwodzie rozrusznika
+- **Decyzja:** holter **nie** ma żadnego elementu pomiarowego w szeregu z głównym przewodem akumulatora.
+  MVP: CAN + pomiar napięcia akumulatora (OBD-II pin 16, dzielnik + ADC/ADS1115).
+  Etap 2 (jeśli CAN nie wskaże winnego): pomiar spadków napięcia na bezpiecznikach (ADS1115, metoda „fuse voltage drop”)
+  albo cęgowy czujnik prądu DC (Hall) nakładany na przewód.
+- **Dlaczego:** prąd rozruchu 150–600 A. Bocznik na tyle prądu ma ~0,1 mΩ, więc 20–50 mA upływu to ~2–5 µV –
+  poniżej rozdzielczości INA226. Bocznik czuły na mA spłonąłby przy rozruchu. Bocznik z przekaźnikiem
+  obejściowym – ryzyko unieruchomienia auta przy awarii przekaźnika.
+- **Odrzucone opcje:** INA226 z bocznikiem na klemie minusowej, bocznik z przekaźnikiem obejściowym.
+- **Otwarte kwestie:** czy w MVP dodać ADS1115 od razu (tani, przyda się w etapie 2).

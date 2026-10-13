@@ -3,7 +3,7 @@
 Rejestrator („holter”) magistrali CAN dla samochodów na ESP32 + MCP2515.
 Urządzenie podłączane do gniazda OBD-II nagrywa ruch na magistrali CAN do późniejszej analizy.
 
-Status: **koncepcja** – zobacz [docs/KONCEPCJA.md](docs/KONCEPCJA.md) i [docs/DECYZJE.md](docs/DECYZJE.md).
+Status: **koncepcja** – zobacz [docs/KONCEPCJA.md](docs/KONCEPCJA.md), [docs/DECYZJE.md](docs/DECYZJE.md) i rozpoznanie [docs/RESEARCH.md](docs/RESEARCH.md).
 
 ## Praca z Claude Code
 

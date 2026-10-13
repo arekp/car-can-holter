@@ -97,3 +97,12 @@ FORScan (darmowy: lista modułów, DTC, konfiguracja GEM – do identyfikacji, n
 - Sam fakt podpięcia może budzić moduły (np. ELM327 w gnieździe OBD) – holter nie może nadawać nic.
 - Moduły TJA1050 na 5 V: wyjście MISO MCP2515 5 V → niebezpieczne dla ESP32 (patrz skill `przeglad-sprzetu`).
 - Pin 16 OBD to stałe 12 V – holter na stałe w aucie musi mieć bezpiecznik i niski pobór na postoju.
+
+## 7. Gotowe produkty – czy to już jest na rynku?
+
+| Produkt | Co umie | Czemu nie wystarcza do naszego celu |
+|---|---|---|
+| ELM327 Bluetooth (klony, ~30–60 zł) | odczyt DTC i parametrów OBD (zapytanie–odpowiedź) z telefonu | tylko HS-CAN (piny 6/14); działa tylko z podłączonym telefonem; aktywnie odpytuje (może budzić moduły); sam pobiera ~40–50 mA na postoju – [pomiar na forum](https://www.priuschat.com/goto/post?id=2053740) |
+| ELM327 z przełącznikiem HS/MS + FORScan (~60–120 zł) | DTC i konfiguracja **wszystkich** modułów Forda, w tym GEM na MS-CAN | dalej narzędzie „na chwilę”, nie rejestrator na postoju. **Przydatny jako uzupełnienie** – odczyt błędów i identyfikacja modułów |
+| [WiCAN (MeatPi)](https://github.com/meatpi/wican) – open source, ESP32-C3 (~150–250 zł) | wtyk OBD, WiFi/BLE, SocketCAN/RealDash/MQTT, uśpienie < 1 mA przy niskim napięciu | jedna magistrala (HS-CAN, piny 6/14), brak zapisu na SD; usypia się właśnie wtedy, gdy chcemy nagrywać |
+| CANedge (CSS Electronics, ~1500 zł+) | profesjonalny rejestrator CAN na SD, 2 kanały | cena; nie mierzy napięcia/kontekstu po swojemu |

@@ -50,3 +50,19 @@ Format wpisu:
   obejściowym – ryzyko unieruchomienia auta przy awarii przekaźnika.
 - **Odrzucone opcje:** INA226 z bocznikiem na klemie minusowej, bocznik z przekaźnikiem obejściowym.
 - **Otwarte kwestie:** czy w MVP dodać ADS1115 od razu (tani, przyda się w etapie 2).
+
+## D-006: Zasilanie z własnego akumulatora ładowanego podczas jazdy (PROPOZYCJA – do potwierdzenia)
+- **Decyzja (proponowana):** holter zasilany z własnego ogniwa Li-ion/LiFePO4, ładowanego tylko przy pracującym
+  silniku (napięcie > 13,2 V lub zasilanie po stacyjce). Na postoju holter nie pobiera prądu z akumulatora auta.
+- **Dlaczego:** pobór holtera nie fałszuje pomiaru upływu i nie dokłada się do rozładowania; ESP32 nie musi
+  agresywnie oszczędzać energii (prostszy firmware, częstsze WiFi); sygnał „ładuję” = „silnik pracuje”.
+- **Ryzyka:**
+  - zwykły powerbank wyłącza wyjście przy małym poborze (< 50–100 mA) i może przerywać zasilanie
+    przy przełączaniu ładowanie/rozładowanie (pass-through) – akurat przy zgaszeniu silnika;
+  - Li-ion w aucie: ładowanie poniżej 0 °C uszkadza ogniwo, latem 60–70 °C – ryzyko spuchnięcia/pożaru;
+  - ładowanie z pinu 16 OBD (stałe 12 V) bez warunku na napięcie znowu ciągnęłoby prąd z auta na postoju.
+- **Konsekwencje dla projektu:** odpada wymóg ultraniskiego poboru (transceiver ze standby, przeróbka Rs);
+  dochodzi moduł zasilania z power-path, BMS, układ włączający ładowanie przy > 13,2 V; wspólna masa z autem
+  (OBD pin 5) nadal wymagana dla CAN.
+- **Odrzucone opcje:** —
+- **Otwarte kwestie:** komercyjny powerbank (prototyp) vs. ogniwo + moduł UPS (docelowo); chemia ogniwa; pojemność.

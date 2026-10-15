@@ -1,147 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
-  <style>
-    .card { fill:#ffffff; stroke:#2b2b2b; stroke-width:2; rx:8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
-    .title { font: 600 16px/1.2 "Inter", Arial, sans-serif; fill:#111111; }
-    .label { font: 400 13px/1.2 "Inter", Arial, sans-serif; fill:#111111; }
-    .pin { font: 400 12px/1.0 "Inter", Arial, sans-serif; fill:#111111; }
-    .conn { stroke:#1f6feb; stroke-width:3; stroke-linecap:round; fill:none; }
-    .gndv { stroke:#7a7a7a; stroke-width:2; stroke-dasharray:4 3; fill:none; }
-    .can { stroke:#d9534f; stroke-width:4; }
-    .term { stroke:#000000; stroke-width:2; }
-    .bg { fill:#f7f9fb; }
-    .label-bg { fill:#f7f9fb; }
-  </style>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900">
+  <defs>
+    <style>
+      .bg { fill: #f5f7fb; }
+      .card { fill: #ffffff; stroke: #2d3a4a; stroke-width: 2; }
+      .title { font: 700 20px 'Segoe UI', Arial, sans-serif; fill: #111827; }
+      .label { font: 500 14px 'Segoe UI', Arial, sans-serif; fill: #1f2937; }
+      .small { font: 400 12px 'Segoe UI', Arial, sans-serif; fill: #374151; }
+      .pin { font: 500 13px 'Segoe UI', Arial, sans-serif; fill: #111827; }
+      .wire { stroke: #2563eb; stroke-width: 3; fill: none; stroke-linecap: round; }
+      .wire2 { stroke: #16a34a; stroke-width: 3; fill: none; stroke-linecap: round; }
+      .gnd { stroke: #6b7280; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+      .can { stroke: #dc2626; stroke-width: 4; fill: none; }
+      .term { stroke: #111827; stroke-width: 2; fill: none; }
+      .led { fill: #facc15; stroke: #b45309; stroke-width: 2; }
+      .btn { fill: #eeeeee; stroke: #666666; stroke-width: 2; }
+      .note { font: 400 13px 'Segoe UI', Arial, sans-serif; fill: #374151; }
+    </style>
+  </defs>
 
-  <!-- background -->
-  <rect width="100%" height="100%" class="bg" />
+  <rect class="bg" x="0" y="0" width="1500" height="900" />
 
-  <!-- Connections drawn BEFORE cards so cards overlay lines and text (no visual overlap) -->
-  <!-- ESP32 -> MCP2515 (SPI + PWR/GND) -->
-  <g id="conn-esp-mcp">
-    <!-- SCK -->
-    <path class="conn" d="M325 136 C350 136, 360 140, 375 142" />
-    <text x="350" y="126" class="label">GPIO18 → SCK</text>
-    <!-- MOSI -->
-    <path class="conn" d="M325 158 C350 158, 360 162, 375 166" />
-    <text x="350" y="150" class="label">GPIO23 → SI (MOSI)</text>
-    <!-- MISO -->
-    <path class="conn" d="M325 180 C350 180, 360 184, 375 190" />
-    <text x="350" y="175" class="label">GPIO19 ← SO (MISO)</text>
-    <!-- CS -->
-    <path class="conn" d="M325 202 C350 202, 360 208, 375 214" />
-    <text x="350" y="195" class="label">GPIO5 → CS (active LOW)</text>
-    <!-- INT -->
-    <path class="conn" d="M325 224 C350 224, 360 232, 375 238" />
-    <text x="350" y="215" class="label">GPIO4 ← INT (active LOW)</text>
+  <!-- ESP32 -->
+  <g id="esp32" transform="translate(40,120)">
+    <rect class="card" x="0" y="0" width="330" height="260" rx="10" />
+    <text x="18" y="30" class="title">ESP32 (WROOM)</text>
+    <text x="18" y="60" class="label">Zasilanie:</text>
+    <text x="18" y="82" class="pin">3.3V</text>
+    <text x="18" y="106" class="pin">GND</text>
 
-    <!-- VCC (single feed) -->
-    <path class="conn" d="M200 120 L275 120 C300 120, 300 100, 375 100" />
-    <text x="240" y="110" class="label">3.3V</text>
-    <!-- GND -->
-    <path class="gndv" d="M200 140 L275 140 C300 140, 300 160, 375 160" />
-    <text x="240" y="150" class="label">GND</text>
+    <text x="170" y="60" class="label">SPI / CAN:</text>
+    <text x="170" y="82" class="pin">GPIO18 → SCK</text>
+    <text x="170" y="106" class="pin">GPIO23 → MOSI</text>
+    <text x="170" y="130" class="pin">GPIO19 ← MISO</text>
+    <text x="170" y="154" class="pin">GPIO5  → CS</text>
+    <text x="170" y="178" class="pin">GPIO4  ← INT</text>
+
+    <text x="18" y="150" class="label">Nowe wejścia/wyjścia:</text>
+    <text x="18" y="178" class="pin">GPIO25 → LED</text>
+    <text x="18" y="202" class="pin">GPIO26 ← PRZYCISK</text>
   </g>
 
-  <!-- MCP2515 -> Transceiver -->
-  <g id="conn-mcp-trans">
-    <!-- TXD -->
-    <path class="conn" d="M705 142 C730 150, 740 170, 755 184" />
-    <text x="730" y="136" class="label">TXD →</text>
-    <!-- RXD -->
-    <path class="conn" d="M705 190 C730 198, 740 204, 755 208" />
-    <text x="730" y="200" class="label">RXD ←</text>
-    <!-- OSC (visual hint) -->
-    <path class="conn" d="M620 176 L700 176" stroke-dasharray="6 4" />
-    <text x="640" y="170" class="label">OSC 8MHz (zegar)</text>
+  <!-- MCP2515 -->
+  <g id="mcp2515" transform="translate(430,80)">
+    <rect class="card" x="0" y="0" width="330" height="280" rx="10" />
+    <text x="18" y="30" class="title">MCP2515 – CAN controller</text>
+    <text x="18" y="60" class="label">Zasilanie:</text>
+    <text x="18" y="82" class="pin">VCC → 3.3V</text>
+    <text x="18" y="106" class="pin">GND → GND</text>
+
+    <text x="18" y="150" class="label">SPI:</text>
+    <text x="18" y="172" class="pin">SCK</text>
+    <text x="18" y="196" class="pin">SI (MOSI)</text>
+    <text x="18" y="220" class="pin">SO (MISO)</text>
+    <text x="18" y="244" class="pin">CS</text>
+    <text x="18" y="268" class="pin">INT</text>
+
+    <text x="200" y="150" class="label">CAN interface:</text>
+    <text x="200" y="172" class="pin">TXD</text>
+    <text x="200" y="196" class="pin">RXD</text>
+    <text x="200" y="220" class="pin">OSC 8 MHz</text>
+    <text x="200" y="244" class="pin">RESET (opcjonalnie)</text>
   </g>
 
-  <!-- Transceiver -> CAN bus -->
-  <g id="conn-trans-can">
-    <path class="conn" d="M820 200 C860 220, 860 300, 860 360" />
-    <text x="840" y="190" class="label">CANH</text>
-    <path class="conn" d="M820 230 C860 250, 860 320, 860 400" />
-    <text x="840" y="230" class="label">CANL</text>
+  <!-- CAN transceiver -->
+  <g id="transceiver" transform="translate(840,90)">
+    <rect class="card" x="0" y="0" width="270" height="220" rx="10" />
+    <text x="18" y="30" class="title">CAN transceiver</text>
+    <text x="18" y="60" class="label">np. SN65HVD230</text>
+    <text x="18" y="90" class="pin">VCC → 3.3V</text>
+    <text x="18" y="116" class="pin">GND → GND</text>
+    <text x="18" y="142" class="pin">TXD → MCP2515 TXD</text>
+    <text x="18" y="168" class="pin">RXD ← MCP2515 RXD</text>
+    <text x="18" y="194" class="pin">CANH / CANL → magistrala CAN</text>
   </g>
 
-  <!-- MCP2515 card -->
-  <g id="mcp" transform="translate(380,40)">
-    <rect x="0" y="0" width="320" height="220" class="card" />
-    <text x="18" y="28" class="title">MCP2515 — CAN controller</text>
-    <text x="18" y="52" class="label">VCC: 3.3V</text>
-    <text x="18" y="72" class="label">GND</text>
-
-    <!-- SPI pins left side -->
-    <text x="18" y="102" class="pin">SCK (SCLK)</text>
-    <text x="18" y="126" class="pin">SI (MOSI)</text>
-    <text x="18" y="150" class="pin">SO (MISO)</text>
-    <text x="18" y="174" class="pin">CS</text>
-    <text x="18" y="198" class="pin">INT (active LOW)</text>
-
-    <!-- transceiver pins on right side -->
-    <text x="200" y="102" class="pin">TXD</text>
-    <text x="200" y="126" class="pin">RXD</text>
-    <text x="200" y="152" class="pin">OSC 8MHz</text>
-    <text x="200" y="176" class="pin">RESET (optional)</text>
+  <!-- LED -->
+  <g id="led" transform="translate(410,470)">
+    <text x="0" y="0" class="label">Lampka / LED</text>
+    <path class="wire2" d="M120 20 L170 20" />
+    <rect x="170" y="12" width="48" height="16" fill="#d1d5db" stroke="#4b5563" stroke-width="1.5" />
+    <circle cx="110" cy="20" r="18" class="led" />
+    <path class="wire2" d="M92 20 L0 20" />
+    <text x="0" y="52" class="small">GPIO25 → 330Ω → LED → GND</text>
   </g>
 
-  <!-- ESP32 card -->
-  <g id="esp32" transform="translate(60,80)">
-    <rect x="0" y="0" width="260" height="160" class="card" />
-    <text x="18" y="28" class="title">ESP32 (WROOM) — 3.3V</text>
-    <!-- pins -->
-    <text x="18" y="56" class="pin">3.3V</text>
-    <rect x="12" y="60" width="12" height="2" fill="#333" />
-    <text x="18" y="80" class="pin">GND</text>
-    <rect x="12" y="84" width="12" height="2" fill="#333" />
-
-    <text x="150" y="56" class="pin">GPIO18 — SCK</text>
-    <text x="150" y="78" class="pin">GPIO23 — MOSI</text>
-    <text x="150" y="100" class="pin">GPIO19 — MISO</text>
-    <text x="150" y="122" class="pin">GPIO5  — CS (SS)</text>
-    <text x="150" y="144" class="pin">GPIO4  — INT</text>
+  <!-- Button -->
+  <g id="button" transform="translate(700,470)">
+    <text x="0" y="0" class="label">Przycisk</text>
+    <rect x="0" y="20" width="130" height="40" class="btn" />
+    <text x="25" y="48" class="small">PRZYCISK</text>
+    <path class="wire2" d="M130 40 L200 40" />
+    <text x="205" y="45" class="small">GPIO26</text>
+    <path class="gnd" d="M65 60 L65 95" />
+    <text x="0" y="112" class="small">spółka do GND po naciśnięciu</text>
+    <text x="0" y="128" class="small">R pull-up 10kΩ do 3.3V</text>
   </g>
 
-  <!-- Transceiver card -->
-  <g id="trans" transform="translate(760,80)">
-    <rect x="0" y="0" width="260" height="160" class="card" />
-    <text x="18" y="28" class="title">CAN Transceiver (e.g. SN65HVD230)</text>
-    <text x="18" y="56" class="label">VCC: 3.3V</text>
-    <text x="18" y="76" class="label">GND</text>
+  <!-- Wires: ESP32 to MCP2515 -->
+  <g id="esp-to-mcp">
+    <path class="wire" d="M370 200 C400 200, 410 200, 430 200" />
+    <text x="380" y="186" class="small">GPIO18 → SCK</text>
 
-    <text x="18" y="104" class="pin">TXD (-> CAN driver)</text>
-    <text x="18" y="128" class="pin">RXD (from CAN driver)</text>
-    <text x="18" y="150" class="pin">CANH / CANL</text>
+    <path class="wire" d="M370 220 C400 220, 410 220, 430 220" />
+    <text x="380" y="206" class="small">GPIO23 → MOSI</text>
+
+    <path class="wire" d="M370 240 C400 240, 410 240, 430 240" />
+    <text x="380" y="226" class="small">GPIO19 ← MISO</text>
+
+    <path class="wire" d="M370 260 C400 260, 410 260, 430 260" />
+    <text x="380" y="246" class="small">GPIO5 → CS</text>
+
+    <path class="wire" d="M370 280 C400 280, 410 280, 430 280" />
+    <text x="380" y="266" class="small">GPIO4 ← INT</text>
+
+    <path class="gnd" d="M110 380 L110 430 C110 440, 110 440, 150 440" />
+    <text x="40" y="430" class="small">GND wspólne</text>
+    <path class="gnd" d="M250 380 L250 435 C250 445, 250 445, 220 445" />
+  </g>
+
+  <!-- Power lines -->
+  <g id="power">
+    <path class="wire" d="M100 160 L180 160 C220 160, 220 150, 230 150" />
+    <path class="wire" d="M100 180 L170 180 C220 180, 220 170, 230 170" />
+    <text x="100" y="150" class="small">3.3V</text>
+    <text x="100" y="205" class="small">GND</text>
+    <path class="gnd" d="M100 200 L170 200 C220 200, 220 200, 230 200" />
+  </g>
+
+  <!-- MCP to transceiver -->
+  <g id="mcp-to-trans">
+    <path class="wire" d="M760 170 C820 170, 820 150, 840 150" />
+    <text x="780" y="160" class="small">TXD →</text>
+    <path class="wire" d="M760 210 C820 210, 820 180, 840 180" />
+    <text x="780" y="200" class="small">RXD ←</text>
   </g>
 
   <!-- CAN bus -->
   <g id="canbus">
-    <text x="450" y="320" class="title">CAN bus / vehicle network</text>
-    <!-- CANH and CANL lines -->
-    <line x1="360" y1="360" x2="860" y2="360" class="can" />
-    <line x1="360" y1="400" x2="860" y2="400" class="can" />
-    <text x="300" y="355" class="label">CANH</text>
-    <text x="300" y="395" class="label">CANL</text>
+    <text x="1080" y="430" class="label">Magistrala CAN</text>
+    <line x1="980" y1="470" x2="1380" y2="470" class="can" />
+    <line x1="980" y1="520" x2="1380" y2="520" class="can" />
+    <text x="900" y="470" class="small">CANH</text>
+    <text x="900" y="520" class="small">CANL</text>
 
-    <!-- terminators -->
-    <g transform="translate(360,360)">
-      <line x1="0" y1="0" x2="0" y2="40" class="term" />
-      <text x="10" y="20" class="label">120 Ω</text>
+    <g transform="translate(980,470)">
+      <line x1="0" y1="0" x2="0" y2="50" class="term" />
+      <text x="8" y="26" class="small">120Ω</text>
     </g>
-    <g transform="translate(860,360)">
-      <line x1="0" y1="0" x2="0" y2="40" class="term" />
-      <text x="10" y="20" class="label">120 Ω</text>
+    <g transform="translate(1380,470)">
+      <line x1="0" y1="0" x2="0" y2="50" class="term" />
+      <text x="8" y="26" class="small">120Ω</text>
     </g>
-
-    <text x="420" y="440" class="label">Uwaga: terminacja 120 Ω na końcach magistrali CAN</text>
   </g>
 
-  <!-- Legend / notes -->
-  <g id="notes" transform="translate(60,480)">
+  <!-- New GPIO led/button label connections -->
+  <g id="new-links">
+    <path class="wire2" d="M370 300 C395 300, 395 340, 410 340" />
+    <text x="376" y="290" class="small">GPIO25</text>
+    <path class="wire2" d="M370 320 C395 320, 395 360, 410 360" />
+    <text x="376" y="310" class="small">GPIO26</text>
+  </g>
+
+  <!-- Notes -->
+  <g id="notes" transform="translate(40,650)">
     <text x="0" y="0" class="label">Notatki:</text>
-    <text x="0" y="18" class="label">- MCP2515 to kontroler CAN — potrzebny jest oddzielny transceiver (np. SN65HVD230).</text>
-    <text x="0" y="36" class="label">- Zasilaj MCP2515 i transceiver 3.3V, GND wspólne z ESP32.</text>
-    <text x="0" y="54" class="label">- Domyślnie używaj trybu listen-only przy pracy z autem. Nie nadawaj bez testów.</text>
+    <text x="0" y="22" class="note">- Żaden element zewnętrzny nie jest podłączony bezpośrednio do magistrali CAN, z wyjątkiem transceivera CAN.</text>
+    <text x="0" y="44" class="note">- LED: GPIO25 przez R = 330Ω, katoda do GND.</text>
+    <text x="0" y="66" class="note">- Przycisk: GPIO26 z pull-up 10kΩ do 3.3V, aktywny LOW po naciśnięciu.</text>
+    <text x="0" y="88" class="note">- Wspólna masa ESP32, MCP2515 i transceiver jest obowiązkowa.</text>
+    <text x="0" y="110" class="note">- Terminacja 120Ω na końcach magistrali CAN jest obowiązkowa w normalnym systemie CAN.</text>
   </g>
-
 </svg>

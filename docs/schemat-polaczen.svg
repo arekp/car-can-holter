@@ -5,31 +5,63 @@
     .title { font: 600 16px/1.2 "Inter", Arial, sans-serif; fill:#111111; }
     .label { font: 400 13px/1.2 "Inter", Arial, sans-serif; fill:#111111; }
     .pin { font: 400 12px/1.0 "Inter", Arial, sans-serif; fill:#111111; }
-    .conn { stroke:#1f6feb; stroke-width:3; stroke-linecap:round; }
-    .gndv { stroke:#7a7a7a; stroke-width:2; stroke-dasharray:4 3; }
+    .conn { stroke:#1f6feb; stroke-width:3; stroke-linecap:round; fill:none; }
+    .gndv { stroke:#7a7a7a; stroke-width:2; stroke-dasharray:4 3; fill:none; }
     .can { stroke:#d9534f; stroke-width:4; }
     .term { stroke:#000000; stroke-width:2; }
     .bg { fill:#f7f9fb; }
+    .label-bg { fill:#f7f9fb; }
   </style>
 
   <!-- background -->
   <rect width="100%" height="100%" class="bg" />
 
-  <!-- ESP32 card -->
-  <g id="esp32" transform="translate(60,80)">
-    <rect x="0" y="0" width="260" height="160" class="card" />
-    <text x="18" y="28" class="title">ESP32 (WROOM) — 3.3V</text>
-    <!-- pins -->
-    <text x="18" y="56" class="pin">3.3V</text>
-    <rect x="12" y="60" width="12" height="2" fill="#333" />
-    <text x="18" y="80" class="pin">GND</text>
-    <rect x="12" y="84" width="12" height="2" fill="#333" />
+  <!-- Connections drawn BEFORE cards so cards overlay lines and text (no visual overlap) -->
+  <!-- ESP32 -> MCP2515 (SPI + PWR/GND) -->
+  <g id="conn-esp-mcp">
+    <!-- SCK -->
+    <path class="conn" d="M325 136 C350 136, 360 140, 375 142" />
+    <text x="350" y="126" class="label">GPIO18 → SCK</text>
+    <!-- MOSI -->
+    <path class="conn" d="M325 158 C350 158, 360 162, 375 166" />
+    <text x="350" y="150" class="label">GPIO23 → SI (MOSI)</text>
+    <!-- MISO -->
+    <path class="conn" d="M325 180 C350 180, 360 184, 375 190" />
+    <text x="350" y="175" class="label">GPIO19 ← SO (MISO)</text>
+    <!-- CS -->
+    <path class="conn" d="M325 202 C350 202, 360 208, 375 214" />
+    <text x="350" y="195" class="label">GPIO5 → CS (active LOW)</text>
+    <!-- INT -->
+    <path class="conn" d="M325 224 C350 224, 360 232, 375 238" />
+    <text x="350" y="215" class="label">GPIO4 ← INT (active LOW)</text>
 
-    <text x="150" y="56" class="pin">GPIO18 — SCK</text>
-    <text x="150" y="78" class="pin">GPIO23 — MOSI</text>
-    <text x="150" y="100" class="pin">GPIO19 — MISO</text>
-    <text x="150" y="122" class="pin">GPIO5  — CS (SS)</text>
-    <text x="150" y="144" class="pin">GPIO4  — INT</text>
+    <!-- VCC (single feed) -->
+    <path class="conn" d="M200 120 L275 120 C300 120, 300 100, 375 100" />
+    <text x="240" y="110" class="label">3.3V</text>
+    <!-- GND -->
+    <path class="gndv" d="M200 140 L275 140 C300 140, 300 160, 375 160" />
+    <text x="240" y="150" class="label">GND</text>
+  </g>
+
+  <!-- MCP2515 -> Transceiver -->
+  <g id="conn-mcp-trans">
+    <!-- TXD -->
+    <path class="conn" d="M705 142 C730 150, 740 170, 755 184" />
+    <text x="730" y="136" class="label">TXD →</text>
+    <!-- RXD -->
+    <path class="conn" d="M705 190 C730 198, 740 204, 755 208" />
+    <text x="730" y="200" class="label">RXD ←</text>
+    <!-- OSC (visual hint) -->
+    <path class="conn" d="M620 176 L700 176" stroke-dasharray="6 4" />
+    <text x="640" y="170" class="label">OSC 8MHz (zegar)</text>
+  </g>
+
+  <!-- Transceiver -> CAN bus -->
+  <g id="conn-trans-can">
+    <path class="conn" d="M820 200 C860 220, 860 300, 860 360" />
+    <text x="840" y="190" class="label">CANH</text>
+    <path class="conn" d="M820 230 C860 250, 860 320, 860 400" />
+    <text x="840" y="230" class="label">CANL</text>
   </g>
 
   <!-- MCP2515 card -->
@@ -53,6 +85,23 @@
     <text x="200" y="176" class="pin">RESET (optional)</text>
   </g>
 
+  <!-- ESP32 card -->
+  <g id="esp32" transform="translate(60,80)">
+    <rect x="0" y="0" width="260" height="160" class="card" />
+    <text x="18" y="28" class="title">ESP32 (WROOM) — 3.3V</text>
+    <!-- pins -->
+    <text x="18" y="56" class="pin">3.3V</text>
+    <rect x="12" y="60" width="12" height="2" fill="#333" />
+    <text x="18" y="80" class="pin">GND</text>
+    <rect x="12" y="84" width="12" height="2" fill="#333" />
+
+    <text x="150" y="56" class="pin">GPIO18 — SCK</text>
+    <text x="150" y="78" class="pin">GPIO23 — MOSI</text>
+    <text x="150" y="100" class="pin">GPIO19 — MISO</text>
+    <text x="150" y="122" class="pin">GPIO5  — CS (SS)</text>
+    <text x="150" y="144" class="pin">GPIO4  — INT</text>
+  </g>
+
   <!-- Transceiver card -->
   <g id="trans" transform="translate(760,80)">
     <rect x="0" y="0" width="260" height="160" class="card" />
@@ -65,40 +114,6 @@
     <text x="18" y="150" class="pin">CANH / CANL</text>
   </g>
 
-  <!-- Connections: ESP32 to MCP2515 -->
-  <g stroke="#1f6feb" stroke-width="3" stroke-linecap="round" fill="none">
-    <!-- VCC -->
-    <line x1="130" y1="120" x2="220" y2="120" class="conn" />
-    <text x="150" y="112" class="label">3.3V</text>
-    <!-- GND -->
-    <line x1="130" y1="140" x2="220" y2="140" class="gndv" />
-    <text x="150" y="150" class="label">GND</text>
-
-    <!-- SCK -->
-    <line x1="210" y1="170" x2="380" y2="140" class="conn" />
-    <text x="280" y="156" class="label">GPIO18 → SCK</text>
-    <!-- MOSI -->
-    <line x1="210" y1="194" x2="380" y2="170" class="conn" />
-    <text x="280" y="170" class="label">GPIO23 → SI (MOSI)</text>
-    <!-- MISO -->
-    <line x1="210" y1="218" x2="380" y2="200" class="conn" />
-    <text x="280" y="190" class="label">GPIO19 ← SO (MISO)</text>
-    <!-- CS -->
-    <line x1="210" y1="242" x2="380" y2="230" class="conn" />
-    <text x="280" y="214" class="label">GPIO5 → CS (active LOW)</text>
-    <!-- INT -->
-    <line x1="210" y1="266" x2="380" y2="260" class="conn" />
-    <text x="280" y="238" class="label">GPIO4 ← INT (active LOW)</text>
-  </g>
-
-  <!-- MCP2515 to transceiver connections -->
-  <g stroke="#1f6feb" stroke-width="3" stroke-linecap="round" fill="none">
-    <line x1="700" y1="120" x2="760" y2="120" class="conn" />
-    <text x="680" y="112" class="label">TXD →</text>
-    <line x1="700" y1="150" x2="760" y2="150" class="conn" />
-    <text x="680" y="154" class="label">RXD ←</text>
-  </g>
-
   <!-- CAN bus -->
   <g id="canbus">
     <text x="450" y="320" class="title">CAN bus / vehicle network</text>
@@ -107,12 +122,6 @@
     <line x1="360" y1="400" x2="860" y2="400" class="can" />
     <text x="300" y="355" class="label">CANH</text>
     <text x="300" y="395" class="label">CANL</text>
-
-    <!-- connection from transceiver to bus -->
-    <line x1="1000" y1="230" x2="860" y2="360" stroke="#1f6feb" stroke-width="3" />
-    <text x="920" y="250" class="label">CANH</text>
-    <line x1="1000" y1="260" x2="860" y2="400" stroke="#1f6feb" stroke-width="3" />
-    <text x="920" y="280" class="label">CANL</text>
 
     <!-- terminators -->
     <g transform="translate(360,360)">

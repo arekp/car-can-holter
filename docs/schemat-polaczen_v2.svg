@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="700" viewBox="0 0 1400 700">
+  <style>
+    .card { fill:#ffffff; stroke:#2b2b2b; stroke-width:2; rx:8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
+    .title { font: 600 16px/1.2 "Inter", Arial, sans-serif; fill:#111111; }
+    .label { font: 400 13px/1.2 "Inter", Arial, sans-serif; fill:#111111; }
+    .pin { font: 400 12px/1.0 "Inter", Arial, sans-serif; fill:#111111; }
+    .conn { stroke:#1f6feb; stroke-width:3; stroke-linecap:round; fill:none; }
+    .gndv { stroke:#7a7a7a; stroke-width:2; stroke-dasharray:4 3; fill:none; }
+    .can { stroke:#d9534f; stroke-width:4; }
+    .term { stroke:#000000; stroke-width:2; }
+    .bg { fill:#f7f9fb; }
+    .label-bg { fill:#f7f9fb; }
+    .led { fill:#ffdd33; stroke:#b88600; stroke-width:2; }
+    .button { fill:#eeeeee; stroke:#666666; stroke-width:2; rx:4; }
+  </style>
+
+  <!-- background -->
+  <rect width="100%" height="100%" class="bg" />
+
+  <!-- Connections drawn BEFORE cards so cards overlay lines and text (no visual overlap) -->
+  <!-- ESP32 -> MCP2515 (SPI + PWR/GND) -->
+  <g id="conn-esp-mcp">
+    <!-- SCK -->
+    <path class="conn" d="M325 136 C350 136, 360 140, 375 142" />
+    <text x="350" y="126" class="label">GPIO18 → SCK</text>
+    <!-- MOSI -->
+    <path class="conn" d="M325 158 C350 158, 360 162, 375 166" />
+    <text x="350" y="150" class="label">GPIO23 → SI (MOSI)</text>
+    <!-- MISO -->
+    <path class="conn" d="M325 180 C350 180, 360 184, 375 190" />
+    <text x="350" y="175" class="label">GPIO19 ← SO (MISO)</text>
+    <!-- CS -->
+    <path class="conn" d="M325 202 C350 202, 360 208, 375 214" />
+    <text x="350" y="195" class="label">GPIO5 → CS (active LOW)</text>
+    <!-- INT -->
+    <path class="conn" d="M325 224 C350 224, 360 232, 375 238" />
+    <text x="350" y="215" class="label">GPIO4 ← INT (active LOW)</text>
+
+    <!-- VCC (single feed) -->
+    <path class="conn" d="M200 120 L275 120 C300 120, 300 100, 375 100" />
+    <text x="240" y="110" class="label">3.3V</text>
+    <!-- GND -->
+    <path class="gndv" d="M200 140 L275 140 C300 140, 300 160, 375 160" />
+    <text x="240" y="150" class="label">GND</text>
+  </g>
+
+  <!-- New: ESP32 -> Button/LED connections -->
+  <g id="conn-esp-led-btn">
+    <!-- LED (GPIO25) -->
+    <path class="conn" d="M220 250 C260 250, 300 250, 360 250" />
+    <text x="270" y="238" class="label">GPIO25 → LED (R=330Ω)</text>
+    <!-- BUTTON (GPIO26) -->
+    <path class="conn" d="M220 280 C260 280, 300 280, 360 280" />
+    <text x="270" y="268" class="label">GPIO26 ← BUTTON (do GND, pull-up 10k)</text>
+  </g>
+
+  <!-- MCP2515 -> Transceiver -->
+  <g id="conn-mcp-trans">
+    <!-- TXD -->
+    <path class="conn" d="M705 142 C730 150, 740 170, 755 184" />
+    <text x="730" y="136" class="label">TXD →</text>
+    <!-- RXD -->
+    <path class="conn" d="M705 190 C730 198, 740 204, 755 208" />
+    <text x="730" y="200" class="label">RXD ←</text>
+    <!-- OSC (visual hint) -->
+    <path class="conn" d="M620 176 L700 176" stroke-dasharray="6 4" />
+    <text x="640" y="170" class="label">OSC 8MHz (zegar)</text>
+  </g>
+
+  <!-- Transceiver -> CAN bus -->
+  <g id="conn-trans-can">
+    <path class="conn" d="M820 200 C860 220, 860 300, 860 360" />
+    <text x="840" y="190" class="label">CANH</text>
+    <path class="conn" d="M820 230 C860 250, 860 320, 860 400" />
+    <text x="840" y="230" class="label">CANL</text>
+  </g>
+
+  <!-- MCP2515 card -->
+  <g id="mcp" transform="translate(380,40)">
+    <rect x="0" y="0" width="320" height="220" class="card" />
+    <text x="18" y="28" class="title">MCP2515 — CAN controller</text>
+    <text x="18" y="52" class="label">VCC: 3.3V</text>
+    <text x="18" y="72" class="label">GND</text>
+
+    <!-- SPI pins left side -->
+    <text x="18" y="102" class="pin">SCK (SCLK)</text>
+    <text x="18" y="126" class="pin">SI (MOSI)</text>
+    <text x="18" y="150" class="pin">SO (MISO)</text>
+    <text x="18" y="174" class="pin">CS</text>
+    <text x="18" y="198" class="pin">INT (active LOW)</text>
+
+    <!-- transceiver pins on right side -->
+    <text x="200" y="102" class="pin">TXD</text>
+    <text x="200" y="126" class="pin">RXD</text>
+    <text x="200" y="152" class="pin">OSC 8MHz</text>
+    <text x="200" y="176" class="pin">RESET (optional)</text>
+  </g>
+
+  <!-- ESP32 card (updated) -->
+  <g id="esp32" transform="translate(60,80)">
+    <rect x="0" y="0" width="320" height="220" class="card" />
+    <text x="18" y="28" class="title">ESP32 (WROOM) — 3.3V (schemat ver 2)</text>
+    <!-- power pins -->
+    <text x="18" y="56" class="pin">3.3V</text>
+    <rect x="12" y="60" width="12" height="2" fill="#333" />
+    <text x="18" y="80" class="pin">GND</text>
+    <rect x="12" y="84" width="12" height="2" fill="#333" />
+
+    <!-- existing SPI/INT pins on right side -->
+    <text x="190" y="56" class="pin">GPIO18 — SCK</text>
+    <text x="190" y="78" class="pin">GPIO23 — MOSI</text>
+    <text x="190" y="100" class="pin">GPIO19 — MISO</text>
+    <text x="190" y="122" class="pin">GPIO5  — CS (SS)</text>
+    <text x="190" y="144" class="pin">GPIO4  — INT</text>
+
+    <!-- NEW: LED and BUTTON pins -->
+    <text x="18" y="120" class="pin">GPIO25 → LED (output)</text>
+    <text x="18" y="142" class="pin">GPIO26 ← BUTTON (input)</text>
+
+  </g>
+
+  <!-- LED symbol and wiring near ESP32 -->
+  <g id="led" transform="translate(420,220)">
+    <!-- LED circle + resistor -->
+    <circle cx="60" cy="30" r="14" class="led" />
+    <rect x="78" y="26" width="40" height="6" fill="#cccccc" stroke="#999" stroke-width="1" />
+    <text x="0" y="-6" class="label">Lampka (LED)</text>
+    <text x="0" y="56" class="label">R1 = 330 Ω (szeregowo z LED)</text>
+    <!-- connection to 3.3V via LED when GPIO drives HIGH -->
+    <path class="conn" d="M0 30 L32 30 C48 30, 54 30, 60 30" />
+    <path class="conn" d="M100 30 L160 30" />
+    <text x="165" y="34" class="label">do GPIO25</text>
+    <text x="165" y="10" class="label">Uwaga: LED + R do GPIO25 (MAX ok. 8-12mA)</text>
+  </g>
+
+  <!-- BUTTON symbol and wiring near ESP32 -->
+  <g id="button" transform="translate(420,300)">
+    <rect x="0" y="0" width="90" height="34" class="button" />
+    <text x="8" y="22" class="label">PRZYCISK</text>
+    <text x="0" y="48" class="label">Pull-up: R2 = 10 kΩ do 3.3V</text>
+    <path class="conn" d="M90 17 L160 17" />
+    <text x="165" y="22" class="label">do GPIO26 (wejście, aktywny LOW)</text>
+    <path class="gndv" d="M45 34 L45 60" />
+    <text x="0" y="68" class="label">Przycisk podłącza do GND po naciśnięciu</text>
+  </g>
+
+  <!-- Transceiver card -->
+  <g id="trans" transform="translate(760,80)">
+    <rect x="0" y="0" width="260" height="160" class="card" />
+    <text x="18" y="28" class="title">CAN Transceiver (e.g. SN65HVD230)</text>
+    <text x="18" y="56" class="label">VCC: 3.3V</text>
+    <text x="18" y="76" class="label">GND</text>
+
+    <text x="18" y="104" class="pin">TXD (-> CAN driver)</text>
+    <text x="18" y="128" class="pin">RXD (from CAN driver)</text>
+    <text x="18" y="150" class="pin">CANH / CANL</text>
+  </g>
+
+  <!-- CAN bus -->
+  <g id="canbus">
+    <text x="450" y="420" class="title">CAN bus / vehicle network</text>
+    <!-- CANH and CANL lines -->
+    <line x1="360" y1="460" x2="860" y2="460" class="can" />
+    <line x1="360" y1="500" x2="860" y2="500" class="can" />
+    <text x="300" y="455" class="label">CANH</text>
+    <text x="300" y="495" class="label">CANL</text>
+
+    <!-- terminators -->
+    <g transform="translate(360,460)">
+      <line x1="0" y1="0" x2="0" y2="40" class="term" />
+      <text x="10" y="20" class="label">120 Ω</text>
+    </g>
+    <g transform="translate(860,460)">
+      <line x1="0" y1="0" x2="0" y2="40" class="term" />
+      <text x="10" y="20" class="label">120 Ω</text>
+    </g>
+
+    <text x="420" y="560" class="label">Uwaga: terminacja 120 Ω na końcach magistrali CAN</text>
+  </g>
+
+  <!-- Legend / notes (updated) -->
+  <g id="notes" transform="translate(60,560)">
+    <text x="0" y="0" class="label">Notatki (schemat ver 2):</text>
+    <text x="0" y="18" class="label">- Dodano przycisk i lampkę sterowaną przez ESP32.</text>
+    <text x="0" y="36" class="label">- Przycisk: podłączony do GPIO26, przycisk zwiera do GND; R pull-up 10 kΩ do 3.3V (można użyć wewnętrznego pull-up).</text>
+    <text x="0" y="54" class="label">- Lampka (LED): sterowana z GPIO25 przez rezystor R1 = 330 Ω (bezpośrednio na wyjściu GPIO — nie przekraczać prądu wyjściowego ESP32).</text>
+    <text x="0" y="72" class="label">- Alternatywnie do lampki można użyć tranzystora MOSFET/NPN (zalecane przy większym prądzie) — opis w dokumentacji projektu.</text>
+    <text x="0" y="90" class="label">- MCP2515 i transceiver domyślnie w trybie listen-only; nie nadawaj na magistralę bez zgody. GND wspólne z ESP32.</text>
+    <text x="0" y="108" class="label">- Uwaga bezpieczeństwa: układ lampki/przycisku nie ingeruje w magistralę CAN. Unikaj zmian, które mogłyby wpływać na sterowniki pojazdu.</text>
+  </g>
+
+</svg>
